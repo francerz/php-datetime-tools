@@ -1,0 +1,19 @@
+{
+    "name": "francerz/datetime-tools",
+    "description": "Date Time Tools for PHP",
+    "type": "library",
+    "license": "ISC",
+    "config": {
+        "platform": {
+            "php": "7.4.0"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Francerz\\DateTimeTools\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}
