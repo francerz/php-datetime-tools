@@ -85,4 +85,28 @@ class DateTimeHelperTest extends TestCase
         $this->assertEquals(44, DateTimeHelper::getWeekOfYear('1991-11-09', WeekDays::FRIDAY));
         $this->assertEquals(45, DateTimeHelper::getWeekOfYear('1991-11-09', WeekDays::SATURDAY));
     }
+
+    public function testIsLeapYear()
+    {
+        $this->assertTrue(DateTimeHelper::isLeapYear(2024));
+        $this->assertFalse(DateTimeHelper::isLeapYear(2023));
+        $this->assertFalse(DateTimeHelper::isLeapYear(2022));
+        $this->assertFalse(DateTimeHelper::isLeapYear(2021));
+        $this->assertTrue(DateTimeHelper::isLeapYear(2020));
+        $this->assertTrue(DateTimeHelper::isLeapYear(2004));
+        $this->assertTrue(DateTimeHelper::isLeapYear(2000));
+        $this->assertTrue(DateTimeHelper::isLeapYear(1996));
+        $this->assertTrue(DateTimeHelper::isLeapYear(1904));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1900));
+        $this->assertTrue(DateTimeHelper::isLeapYear(1896));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1800));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1700));
+        $this->assertTrue(DateTimeHelper::isLeapYear(1600));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1500));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1400));
+        $this->assertFalse(DateTimeHelper::isLeapYear(1300));
+        $this->assertTrue(DateTimeHelper::isLeapYear(1200));
+        $this->assertTrue(DateTimeHelper::isLeapYear(4));
+        $this->assertTrue(DateTimeHelper::isLeapYear(-4));
+    }
 }

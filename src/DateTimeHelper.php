@@ -88,6 +88,12 @@ class DateTimeHelper
         return $min;
     }
 
+    /**
+     * @ignore Uncomplete and failed function.
+     * @param DateTimeInterface|string|int $datetime
+     * @param WeekDays|int $firstDay
+     * @return void
+     */
     public static function getWeekOfYear($datetime, $firstDay = WeekDays::SUNDAY)
     {
         static $yearCache = [];
@@ -105,5 +111,16 @@ class DateTimeHelper
         $days += ($yearCache[$year] + 7 - $firstDay) % 7;
 
         return floor($days / 7);
+    }
+
+    public static function isLeapYear($year)
+    {
+        if ($year % 4 != 0) {
+            return false;
+        }
+        if ($year % 400 == 0) {
+            return true;
+        }
+        return $year % 100 != 0;
     }
 }

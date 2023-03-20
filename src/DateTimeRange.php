@@ -74,8 +74,7 @@ class DateTimeRange
 
         $days = $firstRange->countDays() + $lastRange->countDays();
         for ($y = $startYear + 1; $y < $endYear; $y++) {
-            $range = new DateTimeRange("{$y}-01-01", "{$y}-12-31");
-            $days += $range->countDays();
+            $days += DateTimeHelper::isLeapYear($y) ? 366 : 365;
         }
 
         return $days;
