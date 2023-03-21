@@ -66,6 +66,36 @@ class DateTimeRangeTest extends TestCase
         $this->assertFalse($range->intersectRange(new DateTimeRange('2023-03-10', '2023-12-31'), true));
     }
 
+    public function testRangeIntersect()
+    {
+        $range0 = new DateTimeRange('2023-01-02', '2023-03-15');
+
+        $this->assertEquals(
+            new DateTimeRange('2023-01-02', '2023-01-31'),
+            $range0->getRangeIntersect(new DateTimeRange('2023-01-02', '2023-01-31'))
+        );
+
+        $this->assertEquals(
+            new DateTimeRange('2023-02-01', '2023-02-28'),
+            $range0->getRangeIntersect(new DateTimeRange('2023-02-01', '2023-02-28'))
+        );
+
+        $this->assertEquals(
+            new DateTimeRange('2023-03-01', '2023-03-15'),
+            $range0->getRangeIntersect(new DateTimeRange('2023-03-01', '2023-03-31'))
+        );
+
+        $range1 = new DateTimeRange('2023-03-16', '2023-06-09');
+
+        $this->assertEquals(
+            new DateTimeRange('2023-03-16', '2023-03-31'),
+            $range1->getRangeIntersect(new DateTimeRange('2023-03-01', '2023-03-31'))
+        );
+
+        $this->assertNull($range1->getRangeIntersect(new DateTimeRange('2023-02-01', '2023-02-28')));
+        $this->assertNull($range1->getRangeIntersect(new DateTimeRange('2023-01-02', '2023-01-31')));
+    }
+
     public function testCountWeekDays()
     {
         $range = new DateTimeRange('2023-01-01', '2023-01-31');

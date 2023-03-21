@@ -33,6 +33,8 @@ class DateTimeRange
 
     public function intersectRange(DateTimeRange $range, bool $excludeLimits = false): bool;
 
+    public function getRangeIntersect(DateTimeRange $range): DateTimeRange|null;
+
     public function countSeconds(): int
     
     public function countWeekDays(): int[];

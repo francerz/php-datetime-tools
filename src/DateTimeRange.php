@@ -13,8 +13,8 @@ class DateTimeRange
      */
     public function __construct($start, $end)
     {
-        $this->start = DateTimeHelper::toDateTime($start);
-        $this->end = DateTimeHelper::toDateTime($end);
+        $this->start = DateTimeHelper::toDateTimeImmutable($start);
+        $this->end = DateTimeHelper::toDateTimeImmutable($end);
     }
 
     public function getStart()
@@ -49,6 +49,30 @@ class DateTimeRange
             return true;
         }
         return false;
+    }
+
+    /**
+     * Calculates the current and given range overlaping range.
+     * 
+     * Returns a DateTimeRange object when both ranges overlaps and NULL otherwise.
+     *
+     * @param DateTimeRange $range
+     * @return DateTimeRange|null
+     */
+    public function getRangeIntersect(DateTimeRange $range)
+    {
+        if (!$this->intersectRange($range)) {
+            return null;
+        }
+        $start = $range->start;
+        $end = $range->end;
+        if ($range->intersect($this->start)) {
+            $start = $this->start;
+        }
+        if ($range->intersect($this->end)) {
+            $end = $this->end;
+        }
+        return new static($start, $end);
     }
 
     public function countSeconds()
