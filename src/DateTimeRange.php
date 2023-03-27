@@ -53,7 +53,7 @@ class DateTimeRange
 
     /**
      * Calculates the current and given range overlaping range.
-     * 
+     *
      * Returns a DateTimeRange object when both ranges overlaps and NULL otherwise.
      *
      * @param DateTimeRange $range

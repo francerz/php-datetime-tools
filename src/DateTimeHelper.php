@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 
-class DateTimeHelper
+abstract class DateTimeHelper
 {
     public static function toDateTime($datetime): ?DateTime
     {

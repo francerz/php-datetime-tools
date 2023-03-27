@@ -8,13 +8,20 @@ A set of PHP functions to handle date and time units.
 ```php
 class DateTimeHelper
 {
-    public static function toDateTime($datetime): ?DateTime
+    public static function toDateTime($datetime): ?DateTime;
 
-    public static function toDateTimeImmutable($datetime): ?DateTimeImmutable
+    public static function toDateTimeImmutable($datetime): ?DateTimeImmutable;
 
-    public static function max($datetimes): ?DateTime
+    public static function max($datetimes): ?DateTime;
 
-    public static function min($datetimes): ?DateTime
+    public static function min($datetimes): ?DateTime;
+}
+```
+
+```php
+class DateIntervalHelper
+{
+    public static function create($y = 0, $m = 0, $d = 0, $h = 0, $i = 0, $s = 0);
 }
 ```
 
@@ -35,7 +42,7 @@ class DateTimeRange
 
     public function getRangeIntersect(DateTimeRange $range): DateTimeRange|null;
 
-    public function countSeconds(): int
+    public function countSeconds(): int;
     
     public function countWeekDays(): int[];
 }
