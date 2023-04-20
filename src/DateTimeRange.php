@@ -27,28 +27,24 @@ class DateTimeRange
         return $this->end;
     }
 
-    public function intersect($datetime, bool $excludeLimits = false)
+    public function intersect($datetime, bool $withoutLimit = false)
     {
         $datetime = DateTimeHelper::toDateTime($datetime);
-        return $excludeLimits ?
+        return $withoutLimit ?
             $datetime > $this->start && $datetime < $this->end :
             $datetime >= $this->start && $datetime <= $this->end;
     }
 
-    public function intersectRange(DateTimeRange $range, bool $excludeLimits = false)
+    public function intersectRange(DateTimeRange $range, bool $withoutLimit = false)
     {
-        if (
-            $this->intersect($range->start, $excludeLimits) ||
-            $this->intersect($range->end, $excludeLimits) ||
-            $range->intersect($this->start, $excludeLimits) ||
-            $range->intersect($this->end, $excludeLimits)
-        ) {
-            return true;
-        }
-        if (!$excludeLimits && $this->start == $range->start && $this->end == $range->end) {
-            return true;
-        }
-        return false;
+        return (
+            $this->intersect($range->start, $withoutLimit) ||
+            $this->intersect($range->end, $withoutLimit) ||
+            $range->intersect($this->start, $withoutLimit) ||
+            $range->intersect($this->end, $withoutLimit) ||
+            $this->start == $range->start ||
+            $this->end == $range->end
+        );
     }
 
     /**

@@ -26,10 +26,9 @@ class DateTimeRangeTest extends TestCase
         $range = new DateTimeRange('2022-01-01', '2023-03-10');
 
         $this->assertFalse($range->intersect('2021-12-31'));
-        $this->assertTrue($range->intersect('2022-01-01', false));
-        $this->assertFalse($range->intersect('2022-01-01', true));
-        $this->assertFalse($range->intersect('2023-03-10', true));
-        $this->assertTrue($range->intersect('2023-03-10', false));
+        $this->assertTrue($range->intersect('2022-01-01'));
+        $this->assertTrue($range->intersect('2022-06-30'));
+        $this->assertTrue($range->intersect('2023-03-10'));
         $this->assertFalse($range->intersect('2023-03-11'));
     }
 
@@ -38,32 +37,84 @@ class DateTimeRangeTest extends TestCase
         $range = new DateTimeRange('08:00', '15:00');
 
         $this->assertFalse($range->intersect('07:59'));
-        $this->assertTrue($range->intersect('08:00', false));
-        $this->assertFalse($range->intersect('08:00', true));
+        $this->assertTrue($range->intersect('08:00'));
         $this->assertTrue($range->intersect('08:01'));
         $this->assertTrue($range->intersect('14:59'));
-        $this->assertFalse($range->intersect('15:00', true));
-        $this->assertTrue($range->intersect('15:00', false));
+        $this->assertTrue($range->intersect('15:00'));
         $this->assertFalse($range->intersect('15:01'));
     }
 
-    public function testIntersectRange()
+    public function testIntersectRangeWithLimits()
     {
         $range = new DateTimeRange('2023-01-01', '2023-03-10');
 
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-12-31'), false));
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-02-25'), false));
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-02-25', '2023-12-31'), false));
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-02-25', '2023-03-03'), false));
+        // Starts before, ends before
+        $this->assertFalse($range->intersectRange(new DateTimeRange('2022-01-01', '2022-12-31')));
+        // Starts before, ends at start
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-01-01')));
+        // Starts before, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-02-25')));
+        // Starts before, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-12-31')));
+        // Starts before, ends after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-12-31')));
 
-        $this->assertFalse($range->intersectRange(new DateTimeRange('2022-01-01', '2022-12-31'), false));
-        $this->assertFalse($range->intersectRange(new DateTimeRange('2023-03-11', '2023-12-31'), false));
+        // Starts at start, ends at start
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-01-01', '2023-01-01')));
+        // Starts at start, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-01-01', '2023-02-25')));
+        // Starts at start, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-01-01', '2023-03-10')));
+        // Starts at start, ends at after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-01-01', '2023-12-31')));
 
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2022-01-01', '2023-01-01'), false));
-        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-03-10', '2023-12-31'), false));
+        // Starts middle, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-02-25', '2023-03-03')));
+        // Starts middle, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-02-25', '2023-03-10')));
+        // Starts middle, ends after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-02-25', '2023-12-31')));
 
-        $this->assertFalse($range->intersectRange(new DateTimeRange('2022-01-01', '2023-01-01'), true));
-        $this->assertFalse($range->intersectRange(new DateTimeRange('2023-03-10', '2023-12-31'), true));
+        // Starts at end, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-03-10', '2023-03-10')));
+        // Starts at end, ends after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('2023-03-10', '2023-12-31')));
+
+        // Starts after, ends after
+        $this->assertFalse($range->intersectRange(new DateTimeRange('2023-03-11', '2023-12-31')));
+
+
+        $range = new DateTimeRange('07:00', '20:00');
+        // Starts before, ends before
+        $this->assertFalse($range->intersectRange(new DateTimeRange('05:00', '06:00'), true));
+        // Starts before, ends at start
+        $this->assertFalse($range->intersectRange(new DateTimeRange('05:00', '07:00'), true));
+        // Starts before, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('05:00', '08:00'), true));
+        // Starts before, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('05:00', '20:00'), true));
+        // Starts before, ends after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('05:00', '21:00'), true));
+        // Starts at start, ends at start
+        $this->assertTrue($range->intersectRange(new DateTimeRange('07:00', '07:00'), true));
+        // Starts at start, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('07:00', '08:00'), true));
+        // Starts at start, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('07:00', '20:00'), true));
+        // Starts at start, ends at after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('07:00', '21:00'), true));
+        // Starts middle, ends middle
+        $this->assertTrue($range->intersectRange(new DateTimeRange('08:00', '19:00'), true));
+        // Starts middle, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('08:00', '20:00'), true));
+        // Starts middle, ends after
+        $this->assertTrue($range->intersectRange(new DateTimeRange('08:00', '21:00'), true));
+        // Starts at end, ends at end
+        $this->assertTrue($range->intersectRange(new DateTimeRange('20:00', '20:00'), true));
+        // Starts at end, ends after
+        $this->assertFalse($range->intersectRange(new DateTimeRange('20:00', '21:00'), true));
+        // Starts after, ends after
+        $this->assertFalse($range->intersectRange(new DateTimeRange('21:00', '22:00'), true));
     }
 
     public function testRangeIntersect()

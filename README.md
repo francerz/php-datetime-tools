@@ -36,9 +36,9 @@ class DateTimeRange
 
     public function getEnd(): ?DateTime;
 
-    public function intersect($datetime, $excludeLimits = false): bool;
+    public function intersect($datetime): bool;
 
-    public function intersectRange(DateTimeRange $range, bool $excludeLimits = false): bool;
+    public function intersectRange(DateTimeRange $range, bool $withoutLimit = false): bool;
 
     public function getRangeIntersect(DateTimeRange $range): DateTimeRange|null;
 
